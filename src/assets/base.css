@@ -1,0 +1,26 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+body,
+html {
+    height: 100vh;
+}
+
+body,
+#app {
+    width: 100%;
+    height: 100%;
+}
+#app {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.uplifting {
+    flex-direction: column;
+}
