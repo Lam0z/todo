@@ -1,3 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+:root {
+    --mainFz: 16px;
+    --mainColor: #73a4d2;
+    --mainSecondColor: white;
+}
 *,
 *::before,
 *::after {
@@ -19,8 +25,43 @@ body,
 #app {
     display: flex;
     flex-direction: column;
-    justify-content: center;
 }
-.uplifting {
-    flex-direction: column;
+body {
+    font-family: "Montserrat", system-ui;
+    font-size: var(--mainFz);
+    color: var(--mainColor);
+}
+h1,
+h2 {
+    text-align: center;
+    color: var(--mainColor);
+}
+h1 {
+    font-weight: bold;
+
+    animation: pingText 5s linear infinite alternate-reverse;
+}
+.btn {
+    background: var(--mainColor);
+    color: var(--mainSecondColor);
+    transition: 0.3s all ease;
+}
+
+.btn:hover,
+.btn:active,
+.btn:focus {
+    opacity: 1;
+    background: var(--mainColor) !important;
+    color: var(--mainSecondColor) !important;
+}
+.btn:hover {
+    opacity: 0.9;
+}
+@keyframes pingText {
+    from {
+        -webkit-text-stroke: 0.0625rem var(--mainColor);
+    }
+    to {
+        -webkit-text-stroke: 0.0625rem var(--mainSecondColor);
+    }
 }

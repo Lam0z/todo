@@ -1,38 +1,35 @@
 <script setup>
 const props = defineProps(["listItems"]);
-const emits = defineEmits(["delTask"]);
-const items = [];
-const getDelId = (id) => emits("delTask", id);
 </script>
 <template>
-    <div class="tasks">
-        <ul class="tasks__list list-unstyled mt-3 d-grid row-gap-2">
+    <div class="tasks" v-if="listItems.length">
+        <h2 class="text-center">Tasks</h2>
+        <ul class="tasks__list list-unstyled d-grid row-gap-2 m-0">
             <li
                 v-for="(item, idx) in listItems"
                 :key="idx"
                 class="tasks__item border border-primary d-flex justify-content-between rounded-2 text-truncate"
             >
                 {{ item.taskText }}
-
-                <button
-                    class="tasks__close btn-close"
-                    @click="getDelId(idx)"
-                ></button>
             </li>
         </ul>
     </div>
+    <div class="empty" v-else>Task list is empty 😞</div>
 </template>
 
 <style lang="scss" coped>
 .tasks {
+    padding: 1.25rem;
+    border-radius: 0.3125rem;
+    background: white;
     &__list {
         // display: grid;
         // row-gap: 10px;
     }
     &__item {
         position: relative;
-        padding: 10px;
-        padding-right: 20px;
+        padding: 0.625rem;
+        padding-right: 1.25rem;
         &:hover {
             .tasks__close {
                 opacity: 1;
@@ -40,19 +37,13 @@ const getDelId = (id) => emits("delTask", id);
             }
         }
     }
-    &__close {
-        position: absolute;
-        height: 100%;
-        top: 50%;
-        right: 0;
-
-        opacity: 0;
-        transition: all 0.3s ease;
-        transform: translateX(40px) translateY(-50%);
-        overflow-x: hidden;
-        // background: white;
-
-        color: orange;
-    }
+}
+.empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mainSecondColor);
+    font-size: 3rem;
 }
 </style>
