@@ -2,6 +2,8 @@
 :root {
     --mainFz: 16px;
     --mainColor: #73a4d2;
+    --colorSuccess: #b1ecbb;
+    --colorDelete: #ecb1b1;
     --mainSecondColor: white;
 }
 *,
@@ -23,10 +25,12 @@ body,
     height: 100%;
 }
 #app {
+    position: relative;
     display: flex;
     flex-direction: column;
 }
 body {
+    background: var(--mainColor);
     font-family: "Montserrat", system-ui;
     font-size: var(--mainFz);
     color: var(--mainColor);
@@ -47,15 +51,23 @@ h1 {
     transition: 0.3s all ease;
 }
 
-.btn:hover,
-.btn:active,
-.btn:focus {
+.btn:hover:not(.btn--delete, .btn--success),
+.btn:active:not(.btn--delete, .btn--success),
+.btn:focus:not(.btn--delete, .btn--success) {
     opacity: 1;
     background: var(--mainColor) !important;
     color: var(--mainSecondColor) !important;
 }
 .btn:hover {
     opacity: 0.9;
+}
+.btn--success {
+    color: var(--mainColor) !important;
+    background: var(--colorSuccess) !important;
+}
+.btn--delete {
+    color: var(--mainColor) !important;
+    background: var(--colorDelete) !important;
 }
 @keyframes pingText {
     from {

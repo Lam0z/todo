@@ -1,30 +1,58 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 import TheTemplate from "@/components/TheTemplate.vue";
+import Decoration from "@/components/Decoration.vue";
 import AppInput from "@/components/AppInputGroup.vue";
 import AppTasks from "@/components/AppTasks.vue";
 
 const input = ref();
 
 const tasks = ref([
-    // { taskText: "some text" },
-    // { taskText: "some text 2" },
-    // { taskText: "some text 3" },
+    {
+        id: Date.now(),
+        taskText: "some text",
+        isCompleted: false,
+    },
 ]);
+const tasksItems = computed(() => {
+    return tasks.value.filter((i) => i.isCompleted == false);
+});
+const tasksItemsCompleted = computed(() => {
+    return tasks.value.filter((i) => i.isCompleted == true);
+});
+
 const addTaskItem = (value) => {
-    tasks.value.push({ taskText: value });
+    tasks.value.push({
+        id: Date.now(),
+        taskText: value,
+        isCompleted: false,
+    });
     input.value = "";
+};
+const changeActive = (item) => {
+    const findedItem = tasks.value.find((i) => i.id == item.id);
+    findedItem.isCompleted = !findedItem.isCompleted;
+};
+const delItem = (item) => {
+    const findedIndex = tasks.value.findIndex((i) => i.id == item.id);
+    tasks.value.splice(findedIndex, 1);
 };
 </script>
 
 <template>
-    <div>{{ input }}</div>
+    <Decoration />
     <TheTemplate>
         <template v-slot:header>
             <AppInput v-model="input" @add="addTaskItem"
         /></template>
-        <template v-slot:tasks> <AppTasks :listItems="tasks" /></template>
+        <template v-slot:tasks>
+            <AppTasks
+                :listItems="tasksItems"
+                :listItemsCompleted="tasksItemsCompleted"
+                @active="changeActive"
+                @delete="delItem"
+        /></template>
     </TheTemplate>
 </template>
 

@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from "vue";
-const props = defineProps(["modelValue"]);
 const emit = defineEmits(["add"]);
 const model = defineModel();
 const addTask = () => emit("add", model.value);
@@ -15,10 +14,11 @@ const addTask = () => emit("add", model.value);
             aria-label="Input your task"
             aria-describedby="button-addon1"
             v-model="model"
+            @keyup.enter="addTask"
         />
 
         <button class="btn" type="button" id="button-addon1" @click="addTask">
-            Button
+            Add
         </button>
     </div>
 </template>
