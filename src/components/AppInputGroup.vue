@@ -10,7 +10,7 @@ const addTask = () => emit("add", model.value);
         <input
             type="text"
             class="form-control"
-            placeholder=""
+            placeholder="Write a new task 👀"
             aria-label="Input your task"
             aria-describedby="button-addon1"
             v-model="model"

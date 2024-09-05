@@ -1,9 +1,10 @@
 <script setup>
-const emit = defineEmits(["active", "delete"]);
+const emit = defineEmits(["active", "delete", "edit"]);
 const props = defineProps(["listItems", "listItemsCompleted"]);
 
 const getActiveItem = (item) => emit("active", item);
 const deleteItem = (item) => emit("delete", item);
+const editItemText = (item) => emit("edit", item);
 </script>
 <template>
     <div class="tasks" v-show="listItems.length">
@@ -16,16 +17,36 @@ const deleteItem = (item) => emit("delete", item);
                         item.isCompleted ? 'text-decoration-line-through' : ''
                     "
                 >
-                    {{ item.taskText }}
+                    <div v-if="!item.isEdit">{{ item.taskText }}</div>
+                    <textarea
+                        v-else
+                        type="text"
+                        class="form-control"
+                        v-model="item.taskText"
+                    />
                 </div>
                 <div class="tasks__item-controls">
                     <button
                         class="btn btn--success"
                         @click="getActiveItem(item)"
+                        title="Toggle complete"
+                        v-show="!item.isEdit"
                     >
                         &#10003;
                     </button>
-                    <button class="btn btn--delete" @click="deleteItem(item)">
+                    <button
+                        class="btn btn--edit"
+                        title="Change task text"
+                        @click="editItemText(item)"
+                    >
+                        {{ item.isEdit ? "Confirm" : "&#9998;" }}
+                    </button>
+                    <button
+                        class="btn btn--delete"
+                        @click="deleteItem(item)"
+                        title="Delete task"
+                        v-show="!item.isEdit"
+                    >
                         &#10006;
                     </button>
                 </div>
@@ -73,8 +94,6 @@ const deleteItem = (item) => emit("delete", item);
     border-radius: 0.3125rem;
     background: white;
     &__list {
-        // display: grid;
-        // row-gap: 10px;
     }
     &__item {
         display: flex;
@@ -92,7 +111,18 @@ const deleteItem = (item) => emit("delete", item);
             }
         }
         &-text {
+            flex-grow: 1;
             text-transform: uppercase;
+        }
+        &-controls {
+            // grid-template-columns: repeat(3, 1fr);
+            display: flex;
+            justify-content: space-between;
+            column-gap: 0.125rem;
+            align-items: start;
+            margin-left: 0.625rem;
+            button {
+            }
         }
     }
 }
@@ -102,6 +132,9 @@ const deleteItem = (item) => emit("delete", item);
     align-items: center;
     justify-content: center;
     color: var(--mainSecondColor);
-    font-size: 3rem;
+    font-size: 1rem;
+    @media (min-width: 768px) {
+        font-size: 3rem;
+    }
 }
 </style>
