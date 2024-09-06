@@ -6,7 +6,7 @@ import Decoration from "@/components/Decoration.vue";
 import AppInput from "@/components/AppInputGroup.vue";
 import AppTasks from "@/components/AppTasks.vue";
 
-const input = ref();
+const input = ref("");
 
 const tasks = ref([
     // {
@@ -33,13 +33,15 @@ const tasksItemsCompleted = computed(() => {
 });
 
 const addTaskItem = (value) => {
-    tasks.value.unshift({
-        id: Date.now(),
-        taskText: value,
-        isCompleted: false,
-        isEdit: false,
-    });
-    input.value = "";
+    if (value != "") {
+        tasks.value.unshift({
+            id: Date.now(),
+            taskText: value,
+            isCompleted: false,
+            isEdit: false,
+        });
+        input.value = "";
+    }
 };
 const changeActive = (item) => {
     const findedItem = tasks.value.find((i) => i.id == item.id);

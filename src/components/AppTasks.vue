@@ -1,4 +1,6 @@
 <script setup>
+import Count from "./Count.vue";
+
 const emit = defineEmits(["active", "delete", "edit"]);
 const props = defineProps(["listItems", "listItemsCompleted"]);
 
@@ -9,79 +11,109 @@ const editItemText = (item) => emit("edit", item);
 <template>
     <div class="tasks" v-show="listItems.length">
         <h2 class="text-center">Tasks</h2>
+
         <ul class="tasks__list list-unstyled d-grid row-gap-2 m-0">
-            <li v-for="(item, idx) in listItems" :key="idx" class="tasks__item">
-                <div
-                    class="tasks__item-text"
-                    :class="
-                        item.isCompleted ? 'text-decoration-line-through' : ''
-                    "
+            <TransitionGroup name="list">
+                <li
+                    v-for="(item, idx) in listItems"
+                    :key="item.id"
+                    class="tasks__item"
                 >
-                    <div v-if="!item.isEdit">{{ item.taskText }}</div>
-                    <textarea
-                        v-else
-                        type="text"
-                        class="form-control"
-                        v-model="item.taskText"
-                    />
-                </div>
-                <div class="tasks__item-controls">
-                    <button
-                        class="btn btn--success"
-                        @click="getActiveItem(item)"
-                        title="Toggle complete"
-                        v-show="!item.isEdit"
+                    <div
+                        class="tasks__item-text"
+                        :class="
+                            item.isCompleted
+                                ? 'text-decoration-line-through'
+                                : ''
+                        "
                     >
-                        &#10003;
-                    </button>
-                    <button
-                        class="btn btn--edit"
-                        title="Change task text"
-                        @click="editItemText(item)"
-                    >
-                        {{ item.isEdit ? "Confirm" : "&#9998;" }}
-                    </button>
-                    <button
-                        class="btn btn--delete"
-                        @click="deleteItem(item)"
-                        title="Delete task"
-                        v-show="!item.isEdit"
-                    >
-                        &#10006;
-                    </button>
-                </div>
-            </li>
+                        <div v-if="!item.isEdit">{{ item.taskText }}</div>
+                        <textarea
+                            v-else
+                            type="text"
+                            class="form-control"
+                            v-model="item.taskText"
+                        />
+                    </div>
+                    <div class="tasks__item-controls">
+                        <button
+                            class="btn btn--success"
+                            @click="getActiveItem(item)"
+                            title="Toggle complete"
+                            v-show="!item.isEdit"
+                        >
+                            <font-awesome-icon
+                                :icon="['far', 'circle-check']"
+                            />
+                        </button>
+                        <button
+                            class="btn btn--edit"
+                            title="Change task text"
+                            @click="editItemText(item)"
+                        >
+                            <font-awesome-icon
+                                :icon="['fas', 'pen-to-square']"
+                                v-if="!item.isEdit"
+                            />
+                            <font-awesome-icon
+                                :icon="['fas', 'check']"
+                                v-else
+                            />
+                        </button>
+                        <button
+                            class="btn btn--delete"
+                            @click="deleteItem(item)"
+                            title="Delete task"
+                            v-show="!item.isEdit"
+                        >
+                            <font-awesome-icon :icon="['fas', 'xmark']" />
+                        </button>
+                    </div>
+                </li>
+            </TransitionGroup>
         </ul>
+
+        <Count :tasksCount="listItems.length" :completed="false" />
     </div>
     <div class="tasks" v-show="listItemsCompleted.length">
         <h2 class="text-center">Completed</h2>
         <ul class="tasks__list list-unstyled d-grid row-gap-2 m-0">
-            <li
-                v-for="(item, idx) in listItemsCompleted"
-                :key="idx"
-                class="tasks__item"
-            >
-                <div
-                    class="tasks__item-text"
-                    :class="
-                        item.isCompleted ? 'text-decoration-line-through' : ''
-                    "
+            <TransitionGroup name="list">
+                <li
+                    v-for="(item, idx) in listItemsCompleted"
+                    :key="item.id"
+                    class="tasks__item"
                 >
-                    {{ item.taskText }}
-                </div>
-                <div class="tasks__item-controls">
-                    <button
-                        class="btn btn--success"
-                        @click="getActiveItem(item)"
+                    <div
+                        class="tasks__item-text"
+                        :class="
+                            item.isCompleted
+                                ? 'text-decoration-line-through'
+                                : ''
+                        "
                     >
-                        &#10003;
-                    </button>
-                    <button class="btn btn--delete" @click="deleteItem(item)">
-                        &#10006;
-                    </button>
-                </div>
-            </li>
+                        {{ item.taskText }}
+                    </div>
+                    <div class="tasks__item-controls">
+                        <button
+                            class="btn btn--success"
+                            @click="getActiveItem(item)"
+                        >
+                            <font-awesome-icon
+                                :icon="['far', 'circle-check']"
+                            />
+                        </button>
+                        <button
+                            class="btn btn--delete"
+                            @click="deleteItem(item)"
+                        >
+                            <font-awesome-icon :icon="['fas', 'xmark']" />
+                        </button>
+                    </div>
+                </li>
+            </TransitionGroup>
         </ul>
+        <Count :tasksCount="listItemsCompleted.length" completed />
     </div>
     <div class="empty" v-show="!listItems.length && !listItemsCompleted.length">
         Task list is empty 😞
@@ -92,7 +124,15 @@ const editItemText = (item) => emit("edit", item);
 .tasks {
     padding: 1.25rem;
     border-radius: 0.3125rem;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
     background: white;
+    &:nth-child(2) {
+        border-radius: 0 0 0.3125rem 0.3125rem;
+
+        // background: green;
+        // display: none;
+    }
     &__list {
     }
     &__item {
