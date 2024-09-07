@@ -6,16 +6,11 @@ import Decoration from "@/components/Decoration.vue";
 import AppInput from "@/components/AppInputGroup.vue";
 import AppTasks from "@/components/AppTasks.vue";
 
+const saveToLS = () =>
+    localStorage.setItem("tasks", JSON.stringify(tasks.value));
 const input = ref("");
 
-const tasks = ref([
-    // {
-    //     id: Date.now(),
-    //     taskText: "some text",
-    //     isCompleted: false,
-    //     isEdit: false,
-    // },
-]);
+const tasks = ref(JSON.parse(localStorage.getItem("tasks")) || []);
 const tasksItems = computed(() => {
     return tasks.value.filter((i) => i.isCompleted == false);
 });
@@ -41,21 +36,23 @@ const addTaskItem = (value) => {
             isEdit: false,
         });
         input.value = "";
+        saveToLS();
     }
 };
 const changeActive = (item) => {
     const findedItem = tasks.value.find((i) => i.id == item.id);
     findedItem.isCompleted = !findedItem.isCompleted;
+    saveToLS();
 };
 const delItem = (item) => {
     const findedIndex = tasks.value.findIndex((i) => i.id == item.id);
     tasks.value.splice(findedIndex, 1);
+    saveToLS();
 };
 const editeTaskText = (item) => {
     const findItem = tasks.value.find((i) => i.id == item.id);
-
     findItem.isEdit = !findItem.isEdit;
-    console.log(findItem);
+    saveToLS();
 };
 </script>
 
