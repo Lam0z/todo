@@ -83,6 +83,7 @@ const editItemText = (item) => emit("edit", item);
                     v-for="(item, idx) in listItemsCompleted"
                     :key="item.id"
                     class="tasks__item"
+                    :class="{ 'tasks__item--completed': item.isCompleted }"
                 >
                     <div
                         class="tasks__item-text"
@@ -162,7 +163,12 @@ const editItemText = (item) => emit("edit", item);
             align-items: start;
             margin-left: 0.625rem;
             button {
+                border: 1px solid var(--colorSuccess);
             }
+        }
+        &--completed {
+            color: var(--colorSuccess);
+            border: 1px solid var(--colorSuccess);
         }
     }
 }
